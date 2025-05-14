@@ -63,6 +63,8 @@ class LocationProvider with ChangeNotifier {
     getCurrentLocation();
   }
 
+
+
   Future<void> getCurrentLocation() async {
     _isLoading = true;
     _errorMessage = null;
@@ -204,7 +206,6 @@ class LocationProvider with ChangeNotifier {
         return;
       }
       Placemark place = placeMarks[0];
-      debugPrint(place.toString());
       _currentAddress = [
         place.thoroughfare,
         place.subLocality,

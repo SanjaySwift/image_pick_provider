@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_pick_provider/HomeScreen.dart';
 import 'package:image_pick_provider/LocationSearch/place_provider/location_provider.dart';
+import 'package:image_pick_provider/SelectMap/select_map_provider.dart';
+import 'package:image_pick_provider/select_address_map.dart';
 import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {

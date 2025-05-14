@@ -51,8 +51,7 @@ class PlaceAPIController extends ChangeNotifier {
 
   Future<PlaceDetailsApi?> placeAPI({required String placeId}) async {
     try {
-      EasyLoading.show(status: "Please wait...\n\nDo not close the app or press back\nwhile we confirm your status", dismissOnTap: false, maskType: EasyLoadingMaskType.black);
-
+      EasyLoading.show(status: "Please wait...", dismissOnTap: false, maskType: EasyLoadingMaskType.black);
       final response = await http.get(APIConstant.placeAPi(placeId: placeId));
       const utf8Decoder = Utf8Decoder(allowMalformed: true);
       final decodedBytes = utf8Decoder.convert(response.bodyBytes);

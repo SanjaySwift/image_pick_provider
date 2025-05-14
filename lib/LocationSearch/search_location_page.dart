@@ -17,6 +17,7 @@ class SearchLocationPage extends StatefulWidget {
 }
 
 class _SearchLocationPageState extends State<SearchLocationPage> {
+
   final searchController = TextEditingController();
 
   @override
@@ -130,12 +131,12 @@ class _SearchLocationPageState extends State<SearchLocationPage> {
       if (locationAPI.errorMessage != null) {
         await locationAPI.getCurrentLocation();
       } else {
-        await locationAPI.updatePosition(
-          lat: lat,
-          lng: lng,
-        );
-        Navigator.pop(context);
+        await locationAPI.updatePosition(lat: lat, lng: lng);
+        if(mounted) {
+          Navigator.pop(context);
+        }
       }
     });
   }
+
 }

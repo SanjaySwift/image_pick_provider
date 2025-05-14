@@ -3,7 +3,9 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_pick_provider/HomeScreen.dart';
 import 'package:image_pick_provider/ImagePickerProvider.dart';
 import 'package:image_pick_provider/LocationSearch/place_provider/location_provider.dart';
+import 'package:image_pick_provider/SelectMap/select_map_provider.dart';
 import 'package:image_pick_provider/place_api/place_api_provider/PlaceAPIController.dart';
+import 'package:image_pick_provider/select_address_map.dart';
 import 'package:image_pick_provider/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +25,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => ImagePickerProvider()),
           ChangeNotifierProvider(create: (_) => LocationProvider()),
           ChangeNotifierProvider(create: (_) => PlaceAPIController()),
+          ChangeNotifierProvider(create: (_) => MapProvider()),
         ],
         child: MaterialApp(
             builder: EasyLoading.init(),

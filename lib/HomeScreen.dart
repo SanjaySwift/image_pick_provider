@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_pick_provider/ImagePickerProvider.dart';
 import 'package:image_pick_provider/LocationSearch/place_provider/location_provider.dart';
 import 'package:image_pick_provider/LocationSearch/toolbar.dart';
+import 'package:image_pick_provider/select_address_map.dart';
 import 'package:image_pick_provider/upload_image/image_pick_bottomsheet.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -47,35 +48,38 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final locationProvider = Provider.of<LocationProvider>(context);
-    return  Scaffold(
-            body: locationProvider.isPermissionDenied
-                ? Center(child: InkWell(
-              onTap: ()async{
-                await Geolocator.openAppSettings();
-              }, child: Text("Enable location from setting")))
-                : locationProvider.isLoading?CircularProgressIndicator():
-            Consumer<ImagePickerProvider>(
-                    builder: (context, provider, _) {
-                      return SingleChildScrollView(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 30),
-                            HomePageToolbar(),
-                            const SizedBox(height: 50),
-                            _buildImageDisplay(provider),
-                            const SizedBox(height: 20),
-                            _buildErrorMessage(provider),
-                            const SizedBox(height: 20),
-                            _buildButtons(context, provider),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-          );
+    return Scaffold(
+      body: locationProvider.isPermissionDenied
+          ? Center(
+              child: InkWell(
+                  onTap: () async {
+                    await Geolocator.openAppSettings();
+                  },
+                  child: Text("Enable location from setting")))
+          : locationProvider.isLoading
+              ? CircularProgressIndicator()
+              : Consumer<ImagePickerProvider>(
+                  builder: (context, provider, _) {
+                    return SingleChildScrollView(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 30),
+                          HomePageToolbar(),
+                          const SizedBox(height: 50),
+                          _buildImageDisplay(provider),
+                          const SizedBox(height: 20),
+                          _buildErrorMessage(provider),
+                          const SizedBox(height: 20),
+                          _buildButtons(context, provider),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+    );
   }
 
   Widget _buildImageDisplay(ImagePickerProvider provider) {
@@ -95,13 +99,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   fit: BoxFit.cover,
                 )
               : Column(
-                children: [
-                 // Center(child: Text(locationProvider.getCurrentPosition!.latitude.toString())),
-                  Text(locationProvider.currentAddress.toString()),
-                  Text(locationProvider.getCurrentPosition!.latitude.toString()),
-                  Text(locationProvider.getCurrentPosition!.longitude.toString()),
-                ],
-              ),
+                  children: [
+                    // Center(child: Text(locationProvider.getCurrentPosition!.latitude.toString())),
+                    Text(locationProvider.currentAddress.toString()),
+                    Text(locationProvider.getCurrentPosition!.latitude
+                        .toString()),
+                    Text(locationProvider.getCurrentPosition!.longitude
+                        .toString()),
+                  ],
+                ),
     );
   }
 
@@ -111,7 +117,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             provider.error!,
             style: const TextStyle(color: Colors.red),
             textAlign: TextAlign.center,
-          ) : const SizedBox.shrink();
+          )
+        : const SizedBox.shrink();
   }
 
   Widget _buildButtons(BuildContext context, ImagePickerProvider provider) {
@@ -119,16 +126,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         ElevatedButton.icon(
-          onPressed: provider.isLoading
-              ? null
+          onPressed: provider.isLoading ? null
               : () => provider.pickImage(ImageSource.camera, context: context),
           icon: const Icon(Icons.camera_alt),
           label: const Text('Camera'),
         ),
         ElevatedButton.icon(
           onPressed: provider.isLoading
-              ? null
-              : () => provider.pickImage(ImageSource.gallery),
+              ? null : () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SelectAddressMap())),
+          //provider.pickImage(ImageSource.gallery),
           icon: const Icon(Icons.photo_library),
           label: const Text('Gallery'),
         ),
