@@ -47,27 +47,24 @@ class _SearchLocationPageState extends State<SearchLocationPage> {
         body: Column(
           children: [
             GlobalSearch(
-              onChanged: (value) {
-                setState(()async {
-                  if (value.toString().length > 2) {
+              onChanged: (value) async{
+                  if (value.toString().length > 1) {
                     await placeAPI.autoSearchPlaceAPI(searchAddress: value);
                   }else{
                     await  placeAPI.autoSearchPlaceAPI(searchAddress: "");
                   }
-                });
               },
               controller: searchController,
               clear: searchController.text.isNotEmpty ? true : false,
               clearText: ()async {
                await placeAPI.autoSearchPlaceAPI(searchAddress: "");
                 searchController.clear();
-
               },
               hint: "Search for diagnostics here...",
             ),
             InkWell(
               onTap: () async {
-                locationProvider.isPermissionDenied ? await Geolocator.openAppSettings():await locationProvider.getCurrentLocation();
+                await locationProvider.getCurrentLocation(context);
                 Navigator.pop(context);
               },
               child: Padding(
@@ -99,23 +96,22 @@ class _SearchLocationPageState extends State<SearchLocationPage> {
               ),
             ),
             SizedBox(height: 5),
-            locationProvider.isLoading
+            locationProvider.isCurrentLocationLoading
                 ? Center(child: LinearProgressIndicator(color: Colors.green, minHeight: 2))
-                : SizedBox(height: 20),
+                : SizedBox(height: 0),
             Expanded(
-              child: placeAPI.predictions.isEmpty ? Text("No data found")
-                  : placeAPI.isLoadingAutoSearchPlace?Center(child: CircularProgressIndicator(color: CupertinoColors.systemGreen,)):
+              child: placeAPI.predictions.isEmpty ? Text("Search location") :
               ListView.builder(
                       padding: EdgeInsets.symmetric(horizontal: 12),
                       itemBuilder: (context, index) {
                         return LocationItems(
                             click: () async {
-                              locationProvider.updatePlaceName(placeName: placeAPI.predictions![index].structuredFormatting!.mainText.toString());
-                              locationProvider.updateCurrentAddress(currentAddress: placeAPI.predictions![index].structuredFormatting!.secondaryText.toString());
-                              placeAPi(placeAPI.predictions![index].placeId.toString());
-                            }, predictions: placeAPI.predictions![index]);
+                              locationProvider.updatePlaceName(placeName: placeAPI.predictions[index].structuredFormatting!.mainText.toString());
+                              locationProvider.updateCurrentAddress(currentAddress: placeAPI.predictions[index].structuredFormatting!.secondaryText.toString());
+                              placeAPi(placeAPI.predictions[index].placeId.toString());
+                            }, predictions: placeAPI.predictions[index]);
                       },
-                      itemCount: placeAPI.predictions!.length,
+                      itemCount: placeAPI.predictions.length,
                     ),
             ),
           ],
@@ -129,7 +125,7 @@ class _SearchLocationPageState extends State<SearchLocationPage> {
       double lat = double.parse(value!.result!.geometry!.location!.lat.toString());
       double lng = double.parse(value.result!.geometry!.location!.lng.toString());
       if (locationAPI.errorMessage != null) {
-        await locationAPI.getCurrentLocation();
+        await locationAPI.getCurrentLocation(context);
       } else {
         await locationAPI.updatePosition(lat: lat, lng: lng);
         if(mounted) {

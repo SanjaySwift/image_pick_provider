@@ -17,11 +17,12 @@ class PlaceAPIController extends ChangeNotifier {
   bool isLoadingAutoSearchPlace = true;
   Geometry? geometry;
   List<Predictions> predictions=[];
- // final locationProvider = Provider.of<LocationProvider>(context);
-  LocationProvider locationProvider=LocationProvider();
+
+
 
   Future<dynamic> autoSearchPlaceAPI({required String searchAddress}) async {
     isLoadingAutoSearchPlace=true;
+    notifyListeners();
     try {
       final response = await http.get(APIConstant.placeAutoSearch(searchAddress: searchAddress));
       const utf8Decoder = Utf8Decoder(allowMalformed: true);

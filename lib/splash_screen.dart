@@ -13,23 +13,52 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    locationPermission();
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    locationPermission();
+    //locationPermission();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    final locationProvider = Provider.of<LocationProvider>(context, listen: false);
+    if (state == AppLifecycleState.resumed) {
+     // locationPermission();
+      print("resumed");
+    } else if (state == AppLifecycleState.paused) {
+     // locationPermission();
+      print("paused");
+    } else if (state == AppLifecycleState.inactive) {
+     // locationPermission();
+      print("inactive");
+    } else if (state == AppLifecycleState.detached) {
+      //locationPermission();
+      print("detached");
+    } else if (state == AppLifecycleState.hidden) {
+     //locationPermission();
+      print("hidden");
+    }
   }
 
   Future<void> locationPermission() async {
-    final locationProvider = Provider.of<LocationProvider>(context, listen: false);
-    await locationProvider.getCurrentLocation();
-    if (mounted) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-      );
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_)async {
+     final locationProvider = Provider.of<LocationProvider>(context, listen: false);
+     await locationProvider.getCurrentLocation(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+    });
   }
 
   @override
@@ -40,6 +69,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text("dvjiejvijeivjiejvijeve")
             // Text(locationProvider.currentAddress.toString()),
             // Text(locationProvider.getCurrentPosition!.latitude.toString()),
             // Text(locationProvider.getCurrentPosition!.longitude.toString()),

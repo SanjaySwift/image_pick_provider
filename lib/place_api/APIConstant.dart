@@ -6,7 +6,7 @@ class APIConstant {
     final getAllOfferUri = Uri.parse("https://maps.googleapis.com/maps/api/place/details/json").replace(
         queryParameters: {
           'place_id': placeId,
-          'key': "AIzaSyDtpNz8PDcYLXCE5CRW3z5evNo0mFEfzCE"
+          'key': "AIzaSyA18FaDAzhOiMh_3XrVYKVAXKZqM_B8aK8"
         });
     return getAllOfferUri;
   }
@@ -15,10 +15,9 @@ class APIConstant {
     final getAllOfferUri = Uri.parse("https://maps.googleapis.com/maps/api/place/queryautocomplete/json").replace(
         queryParameters: {
           'input': searchAddress,
-          'key': "AIzaSyDtpNz8PDcYLXCE5CRW3z5evNo0mFEfzCE"
+          'key': "AIzaSyA18FaDAzhOiMh_3XrVYKVAXKZqM_B8aK8" // AIzaSyDtpNz8PDcYLXCE5CRW3z5evNo0mFEfzCE
         });
     return getAllOfferUri;
   }
-
 
 }

@@ -16,10 +16,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    locationPermission();
   }
 
   @override
@@ -30,9 +32,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    final locationProvider = Provider.of<LocationProvider>(context, listen: false);
     if (state == AppLifecycleState.resumed) {
-      await locationProvider.getCurrentLocation();
+      locationPermission();
       print("resumed");
     } else if (state == AppLifecycleState.paused) {
       print("paused");
@@ -43,6 +44,19 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     } else if (state == AppLifecycleState.hidden) {
       print("hidden");
     }
+  }
+
+  Future<void> locationPermission() async {
+    WidgetsBinding.instance.addPostFrameCallback((_)async {
+      final locationProvider = Provider.of<LocationProvider>(context, listen: false);
+      await locationProvider.getCurrentLocation(context);
+      // if (mounted) {
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(builder: (context) => const HomeScreen()),
+      //   );
+      // }
+    });
   }
 
   @override
@@ -102,10 +116,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   children: [
                     // Center(child: Text(locationProvider.getCurrentPosition!.latitude.toString())),
                     Text(locationProvider.currentAddress.toString()),
-                    Text(locationProvider.getCurrentPosition!.latitude
+                    Text(locationProvider.currentPosition==null?"":locationProvider.currentPosition!.latitude
                         .toString()),
-                    Text(locationProvider.getCurrentPosition!.longitude
+                    Text(locationProvider.currentPosition==null?"":locationProvider.currentPosition!.longitude
                         .toString()),
+
+                    Text(locationProvider.isPermissionDenied?"Dined":"Granted"),
                   ],
                 ),
     );

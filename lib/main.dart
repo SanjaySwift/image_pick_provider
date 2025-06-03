@@ -23,13 +23,13 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => ImagePickerProvider()),
-          ChangeNotifierProvider(create: (_) => LocationProvider()),
+          ChangeNotifierProvider(create: (_) => LocationProvider(context)),
           ChangeNotifierProvider(create: (_) => PlaceAPIController()),
           ChangeNotifierProvider(create: (_) => MapProvider()),
         ],
         child: MaterialApp(
             builder: EasyLoading.init(),
-          navigatorKey: navigatorKey,
+          // navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',
             theme: ThemeData(
